@@ -1,0 +1,23 @@
+<template>
+  <v-alert       
+     border="top"
+      colored-border
+      type="error"
+      elevation="2"
+      dismissible
+     @input="onClose" 
+     :value="true">
+     {{ text }}
+     </v-alert>
+</template>
+
+<script>
+export default {
+  props: ["text"],
+  methods: {
+    onClose() {
+      this.$emit("dismissed");
+    }
+  }
+};
+</script>
