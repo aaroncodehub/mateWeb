@@ -52,7 +52,7 @@
             <v-icon color="red">control_point_duplicate</v-icon>
           </v-list-item-action>
           <v-list-item-title class="grey--text text--darken-1"
-            >Create Use Excel</v-list-item-title
+            >Create By Excel</v-list-item-title
           >
         </v-list-item>
 

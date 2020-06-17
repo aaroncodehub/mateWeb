@@ -56,7 +56,7 @@
             <v-spacer></v-spacer>
             <v-icon>not_listed_location</v-icon>
             <small>
-              <v-btn text class="overline" @click="resetPasswordDialog = true">Forgot your password</v-btn>
+              <v-btn text class="overline" @click="resetPasswordDialog = true">Reset your password</v-btn>
             </small>
           </v-card-actions>
         </v-card>

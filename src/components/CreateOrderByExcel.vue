@@ -3,19 +3,14 @@
     <v-layout row align-center justify-center class="mx-1">
       <form @submit.prevent="createOrder">
         <v-flex xs12>
-          <myAlert
-            v-if="error"
-            @dismissed="onDismissed"
-            :text="error"
-          ></myAlert>
+          <myAlert v-if="error" @dismissed="onDismissed" :text="error"></myAlert>
           <v-alert
             v-if="message"
             border="top"
             colored-border
             type="error"
             elevation="2"
-            >{{ message }}</v-alert
-          >
+          >{{ message }}</v-alert>
           <v-stepper v-model="step" vertical>
             <v-stepper-step :complete="step > 1" step="1" :editable="editable">
               Create order
@@ -26,14 +21,30 @@
               <v-card flat color="grey lighten-5" class="mb-6 px-2">
                 <v-layout wrap>
                   <v-flex xs12>
-                    <v-select
-                      prepend-icon="business"
-                      v-model="partner_id"
-                      :items="customers"
-                      label="Customer"
-                      item-text="customer"
-                      item-value="value"
-                    ></v-select>
+                    <v-toolbar dark color="teal">
+                      <v-btn icon>
+                        <v-icon>business</v-icon>
+                      </v-btn>
+                      <v-toolbar-title>Customer</v-toolbar-title>
+                      <v-autocomplete
+                        v-model="partner_id"
+                        :loading="searchLoading"
+                        :items="customers"
+                        :search-input.sync="searchCustomer"
+                        item-text="name"
+                        item-value="id"
+                        cache-items
+                        class="mx-4"
+                        flat
+                        hide-no-data
+                        hide-details
+                        label="APP ORDER"
+                        solo-inverted
+                      ></v-autocomplete>
+                      <v-btn icon>
+                        <v-icon>mdi-dots-vertical</v-icon>
+                      </v-btn>
+                    </v-toolbar>
                   </v-flex>
                   <v-flex xs12 md6>
                     <v-text-field
@@ -88,16 +99,11 @@
 
             <v-stepper-step :complete="step > 2" step="2" :editable="editable">
               Add sales order lines
-              <small>
-                add order lines by importing excel template
-              </small>
+              <small>add order lines by importing excel template</small>
             </v-stepper-step>
 
             <v-stepper-content step="2">
-              <UploadExcelComponent
-                :on-success="handleSuccess"
-                :before-upload="beforeUpload"
-              />
+              <UploadExcelComponent :on-success="handleSuccess" :before-upload="beforeUpload" />
               <v-card flat color="grey lighten-5" class="mb-6 px-2">
                 <v-card-title>
                   Your order lines
@@ -110,19 +116,9 @@
                     hide-details
                   ></v-text-field>
                 </v-card-title>
-                <v-data-table
-                  :headers="headers"
-                  :items="tableData"
-                  :search="search"
-                ></v-data-table>
+                <v-data-table :headers="headers" :items="tableData" :search="search"></v-data-table>
               </v-card>
-              <v-btn
-                type="submit"
-                :disabled="loading"
-                :loading="loading"
-                color="primary"
-                >Submit</v-btn
-              >
+              <v-btn type="submit" :disabled="loading" :loading="loading" color="primary">Submit</v-btn>
 
               <v-btn text :to="{ name: 'Dashboard' }">Cancel</v-btn>
             </v-stepper-content>
@@ -147,12 +143,7 @@
                 </v-flex>
               </v-layout>
 
-              <v-btn
-                :disabled="loading"
-                :loading="loading"
-                color="primary"
-                @click="uploadFile"
-              >
+              <v-btn :disabled="loading" :loading="loading" color="primary" @click="uploadFile">
                 Upload Drawing
                 <v-icon right dark>cloud_upload</v-icon>
               </v-btn>
@@ -163,11 +154,7 @@
         </v-flex>
       </form>
     </v-layout>
-    <v-snackbar
-      color="success"
-      v-model="snackbar.snackbar"
-      :timeout="snackbar.timeout"
-    >
+    <v-snackbar color="success" v-model="snackbar.snackbar" :timeout="snackbar.timeout">
       {{ snackbar.text }}
       <v-btn text @click="snackbar.snackbar = false">Close</v-btn>
     </v-snackbar>
@@ -178,6 +165,7 @@
 import { mapState } from "vuex";
 import UploadExcelComponent from "./UploadExcel";
 import axios from "axios";
+// const fb = require("../fb");
 export default {
   name: "Navbar",
   components: { UploadExcelComponent },
@@ -186,7 +174,7 @@ export default {
       snackbar: {
         snackbar: false,
         text: null,
-        timeout: 2000,
+        timeout: 2000
       },
       step: 1,
       editable: true,
@@ -196,22 +184,19 @@ export default {
         contactName: "",
         contactPhone: "",
         deliver: "",
-        customer_request: "",
+        customer_request: ""
       },
       deliver: ["pick_up", "deliver", "freight"],
       partner_id: null,
-      customers: [
-        { customer: "110 Formosa LTD", value: 8080 },
-        { customer: "360 GLASS LTD", value: 5428 },
-        { customer: "4S MOTORS LTD", value: 5386 },
-      ],
+      salesperson_id: null,
+      customers: [],
       orderId: null,
       orderName: null,
       rules: [
-        (value) =>
+        value =>
           !value ||
           value.size < 20000000 ||
-          "The attachment size should be less than 20 MB!",
+          "The attachment size should be less than 20 MB!"
       ],
       message: null,
       base64: null,
@@ -220,49 +205,51 @@ export default {
       tableData: [],
       tableHeader: [],
       search: "",
+      searchCustomer: "",
+      searchLoading: false,
       headers: [
         {
           text: "Sequence",
-          value: "sequence",
+          value: "sequence"
         },
         {
           text: "Product Code",
-          value: "product_id",
+          value: "product_id"
         },
         {
           text: "Description",
-          value: "name",
+          value: "name"
         },
 
         {
           text: "Order Sequence",
-          value: "order_sequence",
+          value: "order_sequence"
         },
         {
           text: "Quantity",
-          value: "product_uom_qty",
+          value: "product_uom_qty"
         },
         {
           text: "Width",
-          value: "width",
+          value: "width"
         },
         {
           text: "Height",
-          value: "height",
+          value: "height"
         },
         {
           text: "PCs",
-          value: "number_of_pieces",
+          value: "number_of_pieces"
         },
         {
           text: "Flag",
-          value: "ynt_selection",
-        },
-      ],
+          value: "ynt_selection"
+        }
+      ]
     };
   },
   computed: {
-    ...mapState(["userProfile", "loading", "error"]),
+    ...mapState(["userProfile", "loading", "error"])
   },
   methods: {
     createOrder() {
@@ -275,16 +262,15 @@ export default {
       // please confirm the data type
       axios({
         method: "POST",
-        url: "http://api-test.sharpeye.co.nz/api/v1/model/sale.order",
+        url: "https://api.sharpeye.co.nz/api/v1/model/sale.order",
         headers: {
           access_token: this.userProfile.accessToken,
           Accept: "application/json",
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
         data: {
-          partner_id: this.partner_id,
+          partner_id: 9999,
           over_credit_confirmed: this.userProfile.overCreditConfirmed,
-          user_id: this.userProfile.salesPerson,
           alternate_shipping_address: this.salesOrder.shippingAddress,
           client_order_ref: this.salesOrder.clientRef,
           customer_request: this.salesOrder.customer_request,
@@ -292,10 +278,10 @@ export default {
           mobile: this.salesOrder.contactPhone,
           delivery_method: this.salesOrder.deliver,
           created_by: this.userProfile.userId,
-          order_line: this.tableData,
-        },
+          order_line: this.tableData
+        }
       })
-        .then((res) => {
+        .then(res => {
           this.$store.commit("setLoading", false);
           if (res.data.id) {
             this.orderName = res.data.result.name;
@@ -307,10 +293,7 @@ export default {
           } else {
             if (!this.partner_id) {
               this.$store.commit("setLoading", false);
-              this.$store.commit(
-                "setError",
-                " please select a customer"
-              );
+              this.$store.commit("setError", " please select a customer");
             } else {
               this.$store.commit("setLoading", false);
               this.$store.commit(
@@ -346,8 +329,8 @@ export default {
                 orderId: this.orderName,
                 name: this.userProfile.name,
                 date: dateTime,
-                company: this.userProfile.company,
-              },
+                company: this.userProfile.company
+              }
             });
             // .then((response) => {
             //     console.log(response.data);
@@ -357,7 +340,7 @@ export default {
             // })
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.$store.commit("setLoading", false);
           this.$store.commit("setError", err.message);
         });
@@ -377,7 +360,7 @@ export default {
             resolve(encoded);
             this.base64 = encoded;
           };
-          reader.onerror = (error) => reject(error);
+          reader.onerror = error => reject(error);
         });
       } else {
         this.message = this.file
@@ -389,30 +372,30 @@ export default {
       if (this.base64) {
         let formData = {
           data: this.base64,
-          name: this.orderName + " " + "Drawing" + " " + this.file.name,
+          name: this.orderName + " " + "Drawing" + " " + this.file.name
         };
         this.$store.commit("setLoading", true);
         axios({
           method: "POST",
           url:
-            "http://api-test.sharpeye.co.nz/api/v1/model/sale.order/" +
+            "https://api.sharpeye.co.nz/api/v1/model/sale.order/" +
             this.orderId +
             "/attachment",
           headers: {
             access_token: this.userProfile.accessToken,
             Accept: "application/json",
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
           },
           data: {
-            attachments: [formData],
-          },
+            attachments: [formData]
+          }
         })
           .then(() => {
             this.$store.commit("setLoading", false);
             this.snackbar = true;
             this.$router.push("/dashboard");
           })
-          .catch((err) => {
+          .catch(err => {
             this.$store.commit("setLoading", false);
             this.$store.commit("setError", err.message);
           });
@@ -438,7 +421,7 @@ export default {
     handleSuccess({ results, header }) {
       this.tableData = results;
       this.tableHeader = header;
-      results.map((line) => {
+      results.map(line => {
         switch (line.product_id) {
           case "LMG-4MM":
             line.product_id = 2380;
@@ -537,15 +520,18 @@ export default {
             return line.product_id;
         }
       });
-    },
+    }
   },
-  created() {
-    this.salesOrder.shippingAddress = this.userProfile.companyAddress;
-    this.salesOrder.contactName = this.userProfile.name;
-    this.salesOrder.contactPhone = this.userProfile.phone;
-  },
+  //  created() {
+  //     fb.customersCollection.get().then(function(querySnapshot) {
+  //       querySnapshot.forEach(function(doc) {
+  //         // doc.data() is never undefined for query doc snapshots
+  //         this.customers.push(doc.data());
+  //       });
+  //     });
+  //   },
   destroyed() {
     this.$store.commit("clearError");
-  },
+  }
 };
 </script>

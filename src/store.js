@@ -89,7 +89,7 @@ export const store = new Vuex.Store({
         const limited = res.data().limitedOrder
         axios({
           method: 'get',
-          url: 'http://api-test.sharpeye.co.nz/api/v1/model/sale.order/?limit=' + limited + '&detailed=True&domain=partner_id,=,' + companyId,
+          url: 'https://api.sharpeye.co.nz/api/v1/model/sale.order/?limit=' + limited + '&detailed=True&domain=partner_id,=,' + companyId,
           headers: {
             'access_token': accessToken,
             'Accept': 'application/json',

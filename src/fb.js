@@ -23,15 +23,14 @@ const auth = firebase.auth()
 // firebase collections
 const usersCollection = db.collection('users')
 const feedbackCollection = db.collection('feedback')
-const ordersCollection = db.collection('orders')
-const settingsCollection = db.collection('settings')
+const customersCollection = db.collection('customers')
+
 
 
 export {
     db,
     auth,
     usersCollection,
-    ordersCollection,
-    settingsCollection,
-    feedbackCollection
+    feedbackCollection,
+    customersCollection
 }

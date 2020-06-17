@@ -348,35 +348,16 @@
             <v-layout wrap>
               <v-flex xs12>
                 <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Beatae provident libero facilis impedit molestias consequatur
-                  quas, quia, dolorem velit, voluptatibus adipisci magni dolores
-                  exercitationem fugiat sint tempora. Distinctio, quos quidem.
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Dolorem voluptatum eos similique nemo minima iure illum odio
-                  nobis, culpa officia tempora ea ab id voluptas corrupti ad
-                  asperiores. Voluptatum, accusantium? Lorem ipsum dolor sit
-                  amet consectetur, adipisicing elit. Optio molestiae odit vero
-                  nesciunt itaque ab, consequuntur architecto aut fugiat libero
-                  eveniet praesentium possimus illum. Assumenda eos debitis quo
-                  rem vitae. Lorem ipsum dolor sit amet consectetur, adipisicing
-                  elit. Tempore ducimus voluptates harum exercitationem! Sit
-                  laboriosam dolorem perspiciatis, eos nam expedita cupiditate
-                  ea provident quidem maxime natus est asperiores, dolore quod.
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit
-                  non, magnam ea tempora reprehenderit hic alias repudiandae
-                  quam, voluptatibus culpa perspiciatis eos eveniet sequi. Ipsa
-                  illo libero dignissimos ducimus minus. Lorem ipsum dolor sit
-                  amet consectetur adipisicing elit. Aperiam quia sapiente
-                  repellat laboriosam eos et veniam architecto. Facilis ab
-                  consectetur quibusdam voluptatum iusto, ut repudiandae ipsa.
-                  Enim culpa alias earum. Lorem ipsum dolor sit amet consectetur
-                  adipisicing elit. Possimus vitae quidem quisquam illo maxime
-                  eum aperiam consequatur quam ad? Labore sed saepe repellat
-                  aliquid culpa perferendis laborum provident quisquam natus.
+                  Dear customer,<br><br>
+                  When you first use Sharpeye Mate you will need to log in with your provided username and you have to reset your password to keep your account secure. Log in information is confidential and Sharpeye Ltd do not have access to your login details.
+                  Please keep your log in information secure to ensure that others are unable to access your Sharpeye Mate account.<br><br>
+                  If your account is used by another person to place glass orders, you will be personally liable to pay for those orders.<br><br>
+                  Sharpeye Mate is your main method to place your glass orders. Sharpeye Ltd will regard all glass orders placed from your account as valid. If you need to cancel or change any details of your confirmed glass order please contact us via phone or email.<br><br>
+                  Sharpeye Ltd reserve the right to amend these terms and conditions, in whole or in part, for any reason at any time.<br><br>
+                  The Sharpeye Mate App is governed by, and will be construed in accordance with the New Zealand laws and the courts of New Zealand will have non-exclusive jurisdiction.<br>
                 </p>
                 <p class="font-weight-light">
-                  Please note that the notification will be sent to
+                  Please note that the notification will be mailed to
                   {{ userProfile.noticeEmail }} once the new sales order is
                   created.
                 </p>
@@ -498,8 +479,7 @@ export default {
       axios({
         method: "DELETE",
         url:
-          "http://api-test.sharpeye.co.nz/api/v1/model/sale.order/" +
-          this.order.id,
+          "https://api.sharpeye.co.nz/api/v1/model/sale.order/" + this.order.id,
         headers: {
           access_token: this.userProfile.accessToken
         }
@@ -561,8 +541,7 @@ export default {
       this.$store.commit("setLoading", true);
       axios({
         method: "DELETE",
-        url:
-          "http://api-test.sharpeye.co.nz/api/v1/model/sale.order.line/" + id,
+        url: "https://api.sharpeye.co.nz/api/v1/model/sale.order.line/" + id,
         headers: {
           access_token: this.userProfile.accessToken
         }
@@ -615,7 +594,7 @@ export default {
         axios({
           method: "POST",
           url:
-            "http://api-test.sharpeye.co.nz/api/v1/model/sale.order/" +
+            "https://api.sharpeye.co.nz/api/v1/model/sale.order/" +
             orderId +
             "/attachment",
           headers: {
