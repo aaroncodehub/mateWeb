@@ -32,13 +32,14 @@
                         :items="customers"
                         :search-input.sync="searchCustomer"
                         item-text="name"
-                        item-value="id"
+                        item-value="partner_id"
+                        @change="selectChange(partner_id)"
                         cache-items
                         class="mx-4"
                         flat
                         hide-no-data
                         hide-details
-                        label="APP ORDER"
+                        label="type or select the customer"
                         solo-inverted
                       ></v-autocomplete>
                       <v-btn icon>
@@ -165,7 +166,7 @@
 import { mapState } from "vuex";
 import UploadExcelComponent from "./UploadExcel";
 import axios from "axios";
-// const fb = require("../fb");
+const fb = require("../fb");
 export default {
   name: "Navbar",
   components: { UploadExcelComponent },
@@ -269,7 +270,7 @@ export default {
           "Content-Type": "application/json"
         },
         data: {
-          partner_id: 9999,
+          partner_id: this.partner_id,
           over_credit_confirmed: this.userProfile.overCreditConfirmed,
           alternate_shipping_address: this.salesOrder.shippingAddress,
           client_order_ref: this.salesOrder.clientRef,
@@ -520,16 +521,31 @@ export default {
             return line.product_id;
         }
       });
+    },
+    selectChange(partnerId) {
+      const selectedCustomer = this.customers.filter(
+        customer => customer.partner_id === partnerId
+      );
+      this.salesOrder.shippingAddress =
+        selectedCustomer[0].alternate_shipping_address;
+      this.salesOrder.contactName = selectedCustomer[0].contact_name;
+      this.salesOrder.contactPhone = selectedCustomer[0].mobile;
     }
   },
-  //  created() {
-  //     fb.customersCollection.get().then(function(querySnapshot) {
-  //       querySnapshot.forEach(function(doc) {
-  //         // doc.data() is never undefined for query doc snapshots
-  //         this.customers.push(doc.data());
-  //       });
-  //     });
-  //   },
+  mounted() {
+    var getCustomers = [];
+    fb.customersCollection
+      .get()
+      .then(function(querySnapshot) {
+        // querySnapshot.forEach(function(doc) {
+        //   // doc.data() is never undefined for query doc snapshots
+        //   // this.customers.push(doc.data());
+        //   console.log(doc.data())
+        // });
+        getCustomers = querySnapshot.docs.map(doc => doc.data());
+      })
+      .then(() => (this.customers = getCustomers));
+  },
   destroyed() {
     this.$store.commit("clearError");
   }

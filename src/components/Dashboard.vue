@@ -348,13 +348,19 @@
             <v-layout wrap>
               <v-flex xs12>
                 <p>
-                  Dear customer,<br><br>
-                  When you first use Sharpeye Mate you will need to log in with your provided username and you have to reset your password to keep your account secure. Log in information is confidential and Sharpeye Ltd do not have access to your login details.
-                  Please keep your log in information secure to ensure that others are unable to access your Sharpeye Mate account.<br><br>
-                  If your account is used by another person to place glass orders, you will be personally liable to pay for those orders.<br><br>
-                  Sharpeye Mate is your main method to place your glass orders. Sharpeye Ltd will regard all glass orders placed from your account as valid. If you need to cancel or change any details of your confirmed glass order please contact us via phone or email.<br><br>
-                  Sharpeye Ltd reserve the right to amend these terms and conditions, in whole or in part, for any reason at any time.<br><br>
-                  The Sharpeye Mate App is governed by, and will be construed in accordance with the New Zealand laws and the courts of New Zealand will have non-exclusive jurisdiction.<br>
+                  Dear customer,
+                  <br />
+                  <br />When you first use Sharpeye Mate you will need to log in with your provided username and you have to reset your password to keep your account secure. Log in information is confidential and Sharpeye Ltd do not have access to your login details.
+                  Please keep your log in information secure to ensure that others are unable to access your Sharpeye Mate account.
+                  <br />
+                  <br />If your account is used by another person to place glass orders, you will be personally liable to pay for those orders.
+                  <br />
+                  <br />Sharpeye Mate is your main method to place your glass orders. Sharpeye Ltd will regard all glass orders placed from your account as valid. If you need to cancel or change any details of your confirmed glass order please contact us via phone or email.
+                  <br />
+                  <br />Sharpeye Ltd reserve the right to amend these terms and conditions, in whole or in part, for any reason at any time.
+                  <br />
+                  <br />The Sharpeye Mate App is governed by, and will be construed in accordance with the New Zealand laws and the courts of New Zealand will have non-exclusive jurisdiction.
+                  <br />
                 </p>
                 <p class="font-weight-light">
                   Please note that the notification will be mailed to

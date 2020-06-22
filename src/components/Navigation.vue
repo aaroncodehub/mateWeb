@@ -37,23 +37,25 @@
             </v-badge>
           </v-list-item-action>
           <v-list-item-title class="grey--text text--darken-1">Message</v-list-item-title>
-        </v-list-item> -->
+        </v-list-item>-->
 
         <v-list-item :to="{ name: 'AddUser' }" v-if="this.userProfile.rank >= 3">
           <v-list-item-action>
             <v-icon color="red">group_add</v-icon>
           </v-list-item-action>
-          <v-list-item-title class="grey--text text--darken-1"
-            >Add User</v-list-item-title
-          >
+          <v-list-item-title class="grey--text text--darken-1">Add User</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'AddCustomer' }" v-if="this.userProfile.rank >= 3">
+          <v-list-item-action>
+            <v-icon color="red">add_business</v-icon>
+          </v-list-item-action>
+          <v-list-item-title class="grey--text text--darken-1">Add Customer</v-list-item-title>
         </v-list-item>
         <v-list-item :to="{ name: 'CreateOrderByExcel' }" v-if="this.userProfile.rank >= 2">
           <v-list-item-action>
             <v-icon color="red">control_point_duplicate</v-icon>
           </v-list-item-action>
-          <v-list-item-title class="grey--text text--darken-1"
-            >Create By Excel</v-list-item-title
-          >
+          <v-list-item-title class="grey--text text--darken-1">Create By Excel</v-list-item-title>
         </v-list-item>
 
         <v-divider></v-divider>
@@ -61,48 +63,39 @@
           <v-list-item-action>
             <v-icon color="grey darken-1">help</v-icon>
           </v-list-item-action>
-          <v-list-item-title class="grey--text text--darken-1"
-            >Needs Help</v-list-item-title
-          >
+          <v-list-item-title class="grey--text text--darken-1">Needs Help</v-list-item-title>
         </v-list-item>
         <v-list-item :to="{ name: 'Feedback' }">
           <v-list-item-action>
             <v-icon color="grey darken-1">sms</v-icon>
           </v-list-item-action>
-          <v-list-item-title class="grey--text text--darken-1"
-            >Send feedback</v-list-item-title
-          >
+          <v-list-item-title class="grey--text text--darken-1">Send feedback</v-list-item-title>
         </v-list-item>
         <v-list-item :to="{ name: 'Download' }">
           <v-list-item-action>
             <v-icon color="grey darken-1">phonelink</v-icon>
           </v-list-item-action>
-          <v-list-item-title class="grey--text text--darken-1"
-            >App downloads</v-list-item-title
-          >
+          <v-list-item-title class="grey--text text--darken-1">App downloads</v-list-item-title>
         </v-list-item>
         <v-list-item>
           <v-list-item-action>
             <v-icon color="grey darken-1">keyboard</v-icon>
           </v-list-item-action>
-          <v-list-item-title
-            ><a
+          <v-list-item-title>
+            <a
               href="http://www.sharpeye.co.nz"
               target="_blank"
               style="text-decoration:none"
               class="grey--text text--darken-1"
-              >Go to Website</a
-            ></v-list-item-title
-          >
+            >Go to Website</a>
+          </v-list-item-title>
         </v-list-item>
         <v-divider></v-divider>
         <v-list-item @click="logout">
           <v-list-item-action>
             <v-icon color="primary">exit_to_app</v-icon>
           </v-list-item-action>
-          <v-list-item-title class="grey--text text--darken-1"
-            >Logout</v-list-item-title
-          >
+          <v-list-item-title class="grey--text text--darken-1">Logout</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -120,25 +113,19 @@
       height="80px"
     >
       <template v-slot:img="{ props }">
-        <v-img
-          v-bind="props"
-          gradient="to top right, rgba(55,236,186,.7), rgba(25,32,72,.7)"
-        ></v-img>
+        <v-img v-bind="props" gradient="to top right, rgba(55,236,186,.7), rgba(25,32,72,.7)"></v-img>
       </template>
-      <v-app-bar-nav-icon
-        @click.stop="drawer = !drawer"
-        class="white--text"
-      ></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="white--text"></v-app-bar-nav-icon>
       <v-toolbar-title class="mr-5 align-center">
-        <span class="font-weight-light">Sharpeye </span>
-        <router-link to="/" tag="span" style="cursor: pointer"
-          >Mate&trade;</router-link
-        >
+        <span class="font-weight-light">Sharpeye</span>
+        <router-link to="/" tag="span" style="cursor: pointer">Mate&trade;</router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <span class="font-weight-light mt-5 d-none d-sm-flex">{{
+      <span class="font-weight-light mt-5 d-none d-sm-flex">
+        {{
         userProfile.company
-      }}</span>
+        }}
+      </span>
       <v-layout row align-center style="max-width: 650px">
         <!-- <v-text-field
             placeholder="Search..."
@@ -148,7 +135,7 @@
             color="white"
             hide-details
           >
-          </v-text-field> -->
+        </v-text-field>-->
 
         <v-spacer></v-spacer>
 
@@ -161,7 +148,7 @@
             <span>6</span>
           </template>
            <v-icon class="white--text">notifications_active</v-icon>
-        </v-badge> -->
+        </v-badge>-->
         <v-btn icon>
           <v-icon class="white--text">apps</v-icon>
         </v-btn>
@@ -185,20 +172,20 @@ export default {
         {
           icon: "local_shipping",
           title: "Order Completed",
-          link: "/orderCompleted",
+          link: "/orderCompleted"
         },
         {
           icon: "rowing",
           title: "Order Ongoing",
-          link: "/orderOngoing",
+          link: "/orderOngoing"
         },
         { icon: "search", title: "Search More", link: "/search" },
-        { icon: "settings", title: "Settings", link: "/settings" },
-      ],
+        { icon: "settings", title: "Settings", link: "/settings" }
+      ]
     };
   },
   computed: {
-    ...mapState(["currentUser", "userProfile"]),
+    ...mapState(["currentUser", "userProfile"])
   },
   methods: {
     logout() {
@@ -206,8 +193,8 @@ export default {
         this.$store.dispatch("clearData");
         this.$router.push("/login");
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

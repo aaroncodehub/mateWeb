@@ -16,6 +16,7 @@ import Help from '@/components/Help';
 import Feedback from '@/components/Feedback';
 import Download from '@/components/Download'
 import CreateOrderByExcel from '@/components/CreateOrderByExcel'
+import AddCustomer from '@/components/AddCustomer'
 
 Vue.use(Router)
 
@@ -130,6 +131,14 @@ const router = new Router({
 			path: '/search',
 			name: 'Search',
 			component: Search,
+            meta: {
+                requiresAuth: true
+            }
+		},
+		{
+			path: '/addCustomer',
+			name: 'AddCustomer',
+			component: AddCustomer,
             meta: {
                 requiresAuth: true
             }
