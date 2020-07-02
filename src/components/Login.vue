@@ -56,7 +56,11 @@
             <v-spacer></v-spacer>
             <v-icon>not_listed_location</v-icon>
             <small>
-              <v-btn text class="overline" @click="resetPasswordDialog = true">Reset your password</v-btn>
+              <v-btn
+                text
+                class="overline"
+                @click="resetPasswordDialog = true"
+              >Create your password</v-btn>
             </small>
           </v-card-actions>
         </v-card>
@@ -72,7 +76,7 @@
       >
         <v-card>
           <form @submit.prevent="resetPassword">
-            <v-card-title class="grey lighten-4 py-4 title">Reset your password</v-card-title>
+            <v-card-title class="grey lighten-4 py-4 title">Create your password</v-card-title>
             <v-container grid-list-sm class="pa-4">
               <v-layout row wrap>
                 <v-flex xs12>
@@ -92,7 +96,7 @@
                     color="primary"
                     :disabled="loading"
                     :loading="loading"
-                  >Reset</v-btn>
+                  >Create</v-btn>
                   <v-btn text @click="resetPasswordDialog = false">CANCEL</v-btn>
                 </v-flex>
               </v-layout>
@@ -101,6 +105,10 @@
         </v-card>
       </v-dialog>
     </v-layout>
+    <v-snackbar color="success" v-model="snackbar.snackbar" :timeout="snackbar.timeout">
+      {{ snackbar.text }}
+      <v-btn text @click="snackbar.snackbar = false">Close</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -113,7 +121,12 @@ export default {
       email: "",
       password: "",
       resetPasswordDialog: false,
-      resetPasswordEmail: null
+      resetPasswordEmail: null,
+      snackbar: {
+        snackbar: false,
+        text: null,
+        timeout: 20000
+      }
     };
   },
   computed: {
@@ -144,6 +157,9 @@ export default {
           this.resetPasswordDialog = false;
           this.resetPasswordEmail = "";
           this.$store.commit("setLoading", false);
+          this.snackbar.text =
+            "Please check your email and get back to log in with new password you created";
+          this.snackbar.snackbar = true;
         })
         .catch(err => {
           this.$store.commit("setLoading", false);
