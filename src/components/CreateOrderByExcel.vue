@@ -479,7 +479,7 @@ export default {
             line.product_id = 5;
             break;
           case "HO":
-            line.product_id = 2124;
+            line.product_id = 2;
             break;
           case "PA":
             line.product_id = 11;
@@ -488,10 +488,16 @@ export default {
             line.product_id = 8;
             break;
           case "TO":
-            line.product_id = 2094;
+            line.product_id = 9;
             break;
           case "WA":
             line.product_id = 10;
+            break;
+          case "DG":
+            line.product_id = 2614;
+            break;
+          case "LA":
+            line.product_id = 2613;
             break;
           case "M-AC":
             line.product_id = 1855;
@@ -540,7 +546,6 @@ export default {
         // querySnapshot.forEach(function(doc) {
         //   // doc.data() is never undefined for query doc snapshots
         //   // this.customers.push(doc.data());
-        //   console.log(doc.data())
         // });
         getCustomers = querySnapshot.docs.map(doc => doc.data());
       })
