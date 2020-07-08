@@ -524,7 +524,7 @@ export default {
             line.product_id = 2559;
             break;
           default:
-            return line.product_id;
+            return line.product_id = 'Oops! product does not exist.';
         }
       });
     },
