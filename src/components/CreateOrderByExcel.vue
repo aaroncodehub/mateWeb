@@ -231,6 +231,10 @@ export default {
           value: "product_uom_qty"
         },
         {
+          text:"Unit Price",
+          value:"price_unit"
+        },
+        {
           text: "Width",
           value: "width"
         },
