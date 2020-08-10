@@ -39,13 +39,13 @@
           <v-list-item-title class="grey--text text--darken-1">Message</v-list-item-title>
         </v-list-item>-->
 
-        <v-list-item :to="{ name: 'AddUser' }" v-if="this.userProfile.rank >= 3">
+        <v-list-item :to="{ name: 'AddUser' }" v-if="this.userProfile.rank >= 4">
           <v-list-item-action>
             <v-icon color="red">group_add</v-icon>
           </v-list-item-action>
           <v-list-item-title class="grey--text text--darken-1">Add User</v-list-item-title>
         </v-list-item>
-        <v-list-item :to="{ name: 'AddCustomer' }" v-if="this.userProfile.rank >= 3">
+        <v-list-item :to="{ name: 'AddCustomer' }" v-if="this.userProfile.rank >= 4">
           <v-list-item-action>
             <v-icon color="red">add_business</v-icon>
           </v-list-item-action>

@@ -20,6 +20,7 @@ export const store = new Vuex.Store({
     orders: [],
     error: null,
     loading: false,
+    downloadLoading:false
   },
   mutations: {
     setCurrentUser(state, payload) {
@@ -37,6 +38,9 @@ export const store = new Vuex.Store({
     },
     setLoading(state, payload) {
       state.loading = payload;
+    },
+    setDownloadLoading(state, payload) {
+      state.downloadLoading = payload;
     },
     setError(state, payload) {
       state.error = payload;
@@ -89,7 +93,7 @@ export const store = new Vuex.Store({
         const limited = res.data().limitedOrder
         axios({
           method: 'get',
-          url: 'https://api.sharpeye.co.nz/api/v1/model/sale.order/?limit=' + limited + '&detailed=True&domain=partner_id,=,' + companyId,
+          url: 'http://api-test.sharpeye.co.nz/api/v1/model/sale.order/?limit=' + limited + '&detailed=True&domain=state,!=,cancel;partner_id,=,' + companyId,
           headers: {
             'access_token': accessToken,
             'Accept': 'application/json',

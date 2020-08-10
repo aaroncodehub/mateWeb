@@ -197,7 +197,7 @@ export default {
       axios({
         method: "get",
         url:
-          "https://api.sharpeye.co.nz/api/v1/model/sale.order/?domain=name,ilike," +
+          "http://api-test.sharpeye.co.nz/api/v1/model/sale.order/?domain=name,ilike," +
           this.search,
         headers: {
           access_token: this.userProfile.accessToken,
@@ -243,7 +243,8 @@ export default {
       axios({
         method: "get",
         url:
-          "https://api.sharpeye.co.nz/api/v1/model/sale.order/" + this.order.id,
+          "http://api-test.sharpeye.co.nz/api/v1/model/sale.order/" +
+          this.order.id,
         headers: {
           access_token: this.userProfile.accessToken,
           Accept: "application/json",

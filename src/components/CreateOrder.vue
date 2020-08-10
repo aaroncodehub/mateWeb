@@ -269,7 +269,7 @@ export default {
       // please confirm the data type
       axios({
         method: "POST",
-        url: "https://api.sharpeye.co.nz/api/v1/model/sale.order",
+        url: "http://api-test.sharpeye.co.nz/api/v1/model/sale.order",
         headers: {
           access_token: this.userProfile.accessToken,
           Accept: "application/json",
@@ -381,7 +381,7 @@ export default {
         axios({
           method: "POST",
           url:
-            "https://api.sharpeye.co.nz/api/v1/model/sale.order/" +
+            "http://api-test.sharpeye.co.nz/api/v1/model/sale.order/" +
             this.orderId +
             "/attachment",
           headers: {

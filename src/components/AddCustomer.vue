@@ -84,44 +84,57 @@ export default {
         note: "",
         alternate_shipping_address: "",
         salespersonId: "",
-        contact_name:'',
-      }
+        contact_name: "",
+      },
     };
   },
   computed: {
-    ...mapState(["error", "loading"])
+    ...mapState(["error", "loading","userProfile"]),
   },
   methods: {
-    addCustomer: function() {
+    addCustomer: function () {
       this.$store.commit("setLoading", true);
-          fb.customersCollection
-            .doc()
-            .set({
-              name: this.customer.name,
-              partner_id: this.customer.partner_id,
-              mobile: this.customer.mobile,
-              note: this.customer.note,
-              alternate_shipping_address: this.customer.alternate_shipping_address,
-              salespersonId: this.customer.salespersonId,
-              contact_name: this.customer.contact_name,
-            })
-            .then(() => {
-              this.$store.commit("setLoading", false);
-              //  SIGNOUT AFTER ADDING NEW USER
-              
-            })
-            .then(() => {
-                  this.$router.push("/dashboard");
-                })
-            .catch(err => {
-              this.$store.commit("setLoading", false);
-              this.$store.commit("setError", err.message);
-            });
+      fb.customersCollection
+        .doc()
+        .set({
+          name: this.customer.name,
+          partner_id: this.customer.partner_id,
+          mobile: this.customer.mobile,
+          note: this.customer.note,
+          alternate_shipping_address: this.customer.alternate_shipping_address,
+          salespersonId: this.customer.salespersonId,
+          contact_name: this.customer.contact_name,
+        })
+        .then(() => {
+          this.$store.commit("setLoading", false);
+          //  SIGNOUT AFTER ADDING NEW USER
+        })
+        .then(() => {
+          this.$router.push("/dashboard");
+        })
+        .catch((err) => {
+          this.$store.commit("setLoading", false);
+          this.$store.commit("setError", err.message);
+        });
     },
     onDismissed() {
       this.$store.commit("clearError");
+    },
+  },
+  updated() {
+    if (this.userProfile.rank <= 4) {
+      fb.auth
+        .signOut()
+        .then(() => {
+          this.$store.dispatch("clearData");
+          this.$router.push("/login");
+        })
+        .catch((err) => {
+          this.$store.commit("setLoading", false);
+          this.$store.commit("setError", err.message);
+        });
     }
-  }
+  },
 };
 </script>
 

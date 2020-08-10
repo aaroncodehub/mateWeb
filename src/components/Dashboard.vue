@@ -68,7 +68,50 @@
             <td>{{ item.client_order_ref | lessLetters }}</td>
             <td>{{ item.customer_request | lessLetters }}</td>
             <td>
-              <v-tooltip top v-if="item.sales_order_status == 'draft'">
+              <!-- <v-btn small text @click="download(item)">
+                <v-icon color="primary" class="mr-2">save_alt</v-icon>
+              </v-btn>-->
+              <!-- <img src="data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7"> -->
+              <!-- <a href="data:application/pdf;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7" download="test.png">test</a>
+              -->
+              <!-- <v-select
+                v-model="e1"
+                :items="states"
+                menu-props="auto"
+                label="Select Drawings"
+                hide-details
+                prepend-icon="map"
+                single-line
+                @click="download(item)"
+              ></v-select>-->
+              <v-menu offset-y rounded>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn color="primary" v-bind="attrs" v-on="on" @click="download(item)">
+                    <v-icon>save_alt</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item v-if="dLoading">
+                    <v-btn
+                      :loading="dLoading"
+                      :disabled="dLoading"
+                      tile large icon
+                    >
+                    </v-btn>
+                  </v-list-item>
+                  <v-list-item
+                    v-for="(item, index) in myAttachments"
+                    :key="index"
+                    @click="toDownload(item)"
+                  >
+                    <v-list-item-title>{{ item.name }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </td>
+
+            <td>
+              <v-tooltip top v-if="item.state !== 'cancel' && item.sales_order_status == 'draft'">
                 <template v-slot:activator="{ on }">
                   <v-btn small text @click="openUploadDialog(item)" v-on="on" icon>
                     <v-icon color="primary" class="mr-2">cloud_upload</v-icon>
@@ -97,7 +140,7 @@
                 <span>Review Your Order</span>
               </v-tooltip>
 
-              <v-tooltip top v-if="item.sales_order_status == 'draft'">
+              <v-tooltip top v-if="item.state !== 'cancel' && item.sales_order_status == 'draft'">
                 <template v-slot:activator="{ on }">
                   <v-btn small text @click="editOrder(item)" v-on="on" icon>
                     <v-icon color="primary" class="mr-2">edit</v-icon>
@@ -117,7 +160,7 @@
                 </span>
               </v-tooltip>
 
-              <v-tooltip top v-if="item.sales_order_status == 'draft'">
+              <v-tooltip top v-if="item.state !== 'cancel' && item.sales_order_status == 'draft'">
                 <template v-slot:activator="{ on }">
                   <v-btn small text @click="openDeleteDialog(item)" v-on="on" icon>
                     <v-icon color="primary" class="mr-2">delete_forever</v-icon>
@@ -396,26 +439,35 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
+      dLoading: false,
+      myAttachments: [],
+      myItems: [
+        { title: "Click Me" },
+        { title: "Click Me" },
+        { title: "Click Me" },
+        { title: "Click Me 2" },
+      ],
       headers: [
         { text: "Sales Order Status", value: "sales_order_status" },
         {
           text: "Manufacturing Status",
-          value: "manufacturing_status_of_sales_order"
+          value: "manufacturing_status_of_sales_order",
         },
         {
           text: "Sales Oder Number",
           align: "left",
-          value: "name"
+          value: "name",
         },
         { text: "Reference/Description", value: "client_order_ref" },
         { text: "Special Request", value: "customer_request" },
-        { text: "Actions", value: "action", sortable: false }
+        { text: "Download Drawings", value: "" },
+        { text: "Actions", value: "action", sortable: false },
       ],
       search: "",
       snackbar: {
         snackbar: false,
         text: null,
-        timeout: 2000
+        timeout: 2000,
       },
       myAction: false,
       show: true,
@@ -423,7 +475,7 @@ export default {
         deleteDialog: false,
         moreDialog: false,
         editDialog: false,
-        uploadDialog: false
+        uploadDialog: false,
       },
       order: {
         id: null,
@@ -434,7 +486,7 @@ export default {
         mobile: null,
         delivery_method: null,
         order_lines: null,
-        customer_request: null
+        customer_request: null,
       },
       step: 1,
       stepMore: 1,
@@ -453,23 +505,23 @@ export default {
         { product: "LMG-12MM-GREEN", value: 2083 },
         { product: "LMG-12MM-ULTRA-CLEAR", value: 2529 },
         { product: "LMG-15MM", value: 30 },
-        { product: "LMG-15MM-ULTRA-CLEAR", value: 2530 }
+        { product: "LMG-15MM-ULTRA-CLEAR", value: 2530 },
       ],
       drawings: [
         { flag: "Drawing", value: "y" },
         { flag: "Dimension", value: "n" },
-        { flag: "Template", value: "t" }
+        { flag: "Template", value: "t" },
       ],
       deliver: ["pick_up", "deliver", "freight"],
       rules: [
-        value =>
+        (value) =>
           !value ||
           value.size < 20000000 ||
-          "The attachment size should be less than 20 MB!"
+          "The attachment size should be less than 20 MB!",
       ],
       message: null,
       base64: null,
-      file: null
+      file: null,
     };
   },
   methods: {
@@ -483,11 +535,15 @@ export default {
     },
     deleteOrder() {
       axios({
-        method: "DELETE",
+        method: "PUT",
         url:
-          "https://api.sharpeye.co.nz/api/v1/model/sale.order/" + this.order.id,
+          "http://api-test.sharpeye.co.nz/api/v1/model/sale.order/" +
+          this.order.id,
         headers: {
-          access_token: this.userProfile.accessToken
+          access_token: this.userProfile.accessToken,
+        },
+        data:{
+          api_cancelled: true
         }
       })
         .then(() => {
@@ -496,7 +552,7 @@ export default {
           this.snackbar.snackbar = true;
           this.snackbar.text = `the sales order ${this.order.name} has been deleted successfully`;
         })
-        .catch(err => {
+        .catch((err) => {
           this.$store.commit("setError", err.message);
           // console.log(err);
         });
@@ -547,21 +603,22 @@ export default {
       this.$store.commit("setLoading", true);
       axios({
         method: "DELETE",
-        url: "https://api.sharpeye.co.nz/api/v1/model/sale.order.line/" + id,
+        url:
+          "http://api-test.sharpeye.co.nz/api/v1/model/sale.order.line/" + id,
         headers: {
-          access_token: this.userProfile.accessToken
-        }
+          access_token: this.userProfile.accessToken,
+        },
       })
         .then(() => {
           this.$store.commit("setLoading", false);
           this.$store.commit("deleteOrderLine", {
             lineId: id,
-            orderId: this.order.id
+            orderId: this.order.id,
           });
           this.snackbar.text = " delete sales order line successfully ";
           this.snackbar.snackbar = true;
         })
-        .catch(err => {
+        .catch((err) => {
           this.$store.commit("setLoading", false);
           this.$store.commit("setError", err.message);
           // console.log(err);
@@ -582,7 +639,7 @@ export default {
             resolve(encoded);
             this.base64 = encoded;
           };
-          reader.onerror = error => reject(error);
+          reader.onerror = (error) => reject(error);
         });
       } else {
         this.message = this.file
@@ -594,23 +651,23 @@ export default {
       if (this.base64) {
         let formData = {
           data: this.base64,
-          name: orderName + " " + "Drawing" + " " + this.file.name
+          name: orderName + " " + "Drawing" + " " + this.file.name,
         };
         this.$store.commit("setLoading", true);
         axios({
           method: "POST",
           url:
-            "https://api.sharpeye.co.nz/api/v1/model/sale.order/" +
+            "http://api-test.sharpeye.co.nz/api/v1/model/sale.order/" +
             orderId +
             "/attachment",
           headers: {
             access_token: this.userProfile.accessToken,
             Accept: "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
           data: {
-            attachments: [formData]
-          }
+            attachments: [formData],
+          },
         })
           .then(() => {
             this.$store.commit("setLoading", false);
@@ -618,25 +675,63 @@ export default {
             this.snackbar.text = " upload successfully ";
             this.snackbar.snackbar = true;
           })
-          .catch(err => {
+          .catch((err) => {
             this.$store.commit("setLoading", false);
             this.$store.commit("setError", err.message);
             // console.log(err);
           });
       }
     },
+    download(item) {
+      this.dLoading = true;
+      this.myAttachments = [];
+      axios({
+        method: "GET",
+        url:
+          "http://api-test.sharpeye.co.nz/api/v1/model/sale.order/" +
+          item.id +
+          "/attachments?all_attachments=True",
+        headers: {
+          access_token: this.userProfile.accessToken,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          this.dLoading = false;
+          if (response.data.attachments.length !== 0) {
+            this.myAttachments = response.data.attachments;
+          } else {
+            this.myAttachments = [{ name: "no drawing" }];
+          }
+        })
+        .catch(() => {
+          this.dLoading = false;
+          this.snackbar.snackbar = true;
+          this.snackbar.text = `Oops ! no drawing exists`;
+        });
+    },
+    toDownload(item) {
+      const linkSource = `data:application/pdf;base64,${item.base64}`;
+      const downloadLink = document.createElement("a");
+      const fileName = item.name;
+      downloadLink.href = linkSource;
+      downloadLink.download = fileName;
+      downloadLink.click();
+      this.myAttachments = [];
+    },
     agree() {
       this.$store.commit("setLoading", true);
       fb.usersCollection
         .doc(this.currentUser.uid)
         .update({
-          agreement: false
+          agreement: false,
         })
         .then(() => {
           this.$store.commit("setLoading", false);
           this.userProfile.agreement = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.$store.commit("setLoading", false);
           this.$store.commit("setError", err.message);
         });
@@ -648,13 +743,13 @@ export default {
           this.$store.dispatch("clearData");
           this.$router.push("/login");
         })
-        .catch(err => {
+        .catch((err) => {
           this.$store.commit("setError", err.message);
         });
-    }
+    },
   },
   computed: {
-    ...mapState(["userProfile", "orders", "error", "loading", "currentUser"])
+    ...mapState(["userProfile", "orders", "error", "loading", "currentUser"]),
     //   checkedOrders() {
     //     const newOrders = this.orders.map(el => {
     //       if (el.order_line.findIndex(line => line.state == "confirmed") == -1) {
@@ -668,7 +763,7 @@ export default {
     //   }
   },
   filters: {
-    lessLetters: function(value) {
+    lessLetters: function (value) {
       if (value.length > 20) {
         value = value.slice(0, 20) + ` ...`;
         return value;
@@ -676,14 +771,14 @@ export default {
         return value;
       }
       return "";
-    }
+    },
   },
   mounted() {
     this.$store.dispatch("fetchUserProfile");
   },
   beforeDestroy() {
     this.$store.commit("clearError");
-  }
+  },
 };
 </script>
 

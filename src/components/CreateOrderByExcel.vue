@@ -231,8 +231,8 @@ export default {
           value: "product_uom_qty"
         },
         {
-          text:"Unit Price",
-          value:"price_unit"
+          text: "Unit Price",
+          value: "price_unit"
         },
         {
           text: "Width",
@@ -267,7 +267,7 @@ export default {
       // please confirm the data type
       axios({
         method: "POST",
-        url: "https://api.sharpeye.co.nz/api/v1/model/sale.order",
+        url: "http://api-test.sharpeye.co.nz/api/v1/model/sale.order",
         headers: {
           access_token: this.userProfile.accessToken,
           Accept: "application/json",
@@ -383,7 +383,7 @@ export default {
         axios({
           method: "POST",
           url:
-            "https://api.sharpeye.co.nz/api/v1/model/sale.order/" +
+            "http://api-test.sharpeye.co.nz/api/v1/model/sale.order/" +
             this.orderId +
             "/attachment",
           headers: {
@@ -528,7 +528,7 @@ export default {
             line.product_id = 2559;
             break;
           default:
-            return line.product_id = 'Oops! product does not exist.';
+            return (line.product_id = "Oops! product does not exist.");
         }
       });
     },
@@ -557,6 +557,20 @@ export default {
   },
   destroyed() {
     this.$store.commit("clearError");
-  }
+  },
+    updated() {
+    if (this.userProfile.rank < 2) {
+      fb.auth
+        .signOut()
+        .then(() => {
+          this.$store.dispatch("clearData");
+          this.$router.push("/login");
+        })
+        .catch((err) => {
+          this.$store.commit("setLoading", false);
+          this.$store.commit("setError", err.message);
+        })
+    }
+  },
 };
 </script>

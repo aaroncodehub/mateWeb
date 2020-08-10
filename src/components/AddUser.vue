@@ -107,13 +107,15 @@
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs6>
-                  <v-checkbox
-                    v-model="newUser.overCreditConfirmed"
-                    label="Over Credit Confirmed"
-                  ></v-checkbox>
+                  <v-checkbox v-model="newUser.overCreditConfirmed" label="Over Credit Confirmed"></v-checkbox>
                 </v-flex>
                 <v-flex xs6>
-                  <v-text-field prepend-icon="mdi-message-text" label="Message Email*" v-model.trim="newUser.messageEmail" required></v-text-field>
+                  <v-text-field
+                    prepend-icon="mdi-message-text"
+                    label="Message Email*"
+                    v-model.trim="newUser.messageEmail"
+                    required
+                  ></v-text-field>
                 </v-flex>
                 <v-flex xs6>
                   <v-text-field prepend-icon="notes" label="Notes" v-model.trim="newUser.note"></v-text-field>
@@ -150,27 +152,27 @@ export default {
         companyAddress: "",
         salesPerson: "",
         userId: "",
-        noticeEmail:'',
+        noticeEmail: "",
         limitedOrder: null,
         overCreditConfirmed: false,
         rank: 1,
-        agreement:true,
-        messageEmail:""
-      }
+        agreement: true,
+        messageEmail: "",
+      },
     };
   },
   computed: {
-    ...mapState(["error", "loading"])
+    ...mapState(["error", "loading", "userProfile"]),
   },
   methods: {
-    addUser: function() {
+    addUser: function () {
       this.$store.commit("setLoading", true);
       fb.auth
         .createUserWithEmailAndPassword(
           this.newUser.email,
           this.newUser.password
         )
-        .then(user => {
+        .then((user) => {
           fb.usersCollection
             .doc(user.user.uid)
             .set({
@@ -189,7 +191,7 @@ export default {
               overCreditConfirmed: this.newUser.overCreditConfirmed,
               rank: this.newUser.rank,
               agreement: this.newUser.agreement,
-              messageEmail: this.newUser.messageEmail
+              messageEmail: this.newUser.messageEmail,
             })
             .then(() => {
               this.$store.commit("setLoading", false);
@@ -200,25 +202,39 @@ export default {
                   this.$store.dispatch("clearData");
                   this.$router.push("/login");
                 })
-                .catch(err => {
+                .catch((err) => {
                   this.$store.commit("setLoading", false);
                   this.$store.commit("setError", err.message);
                 });
             })
-            .catch(err => {
+            .catch((err) => {
               this.$store.commit("setLoading", false);
               this.$store.commit("setError", err.message);
             });
         })
-        .catch(err => {
+        .catch((err) => {
           this.$store.commit("setLoading", false);
           this.$store.commit("setError", err.message);
         });
     },
     onDismissed() {
       this.$store.commit("clearError");
+    },
+  },
+  updated() {
+    if (this.userProfile.rank <= 4) {
+      fb.auth
+        .signOut()
+        .then(() => {
+          this.$store.dispatch("clearData");
+          this.$router.push("/login");
+        })
+        .catch((err) => {
+          this.$store.commit("setLoading", false);
+          this.$store.commit("setError", err.message);
+        })
     }
-  }
+  },
 };
 </script>
 

@@ -280,7 +280,8 @@ export default {
       axios({
         method: "PUT",
         url:
-          "https://api.sharpeye.co.nz/api/v1/model/sale.order/" + this.order.id,
+          "http://api-test.sharpeye.co.nz/api/v1/model/sale.order/" +
+          this.order.id,
         headers: {
           access_token: this.userProfile.accessToken,
           Accept: "application/json",
@@ -320,7 +321,8 @@ export default {
       this.$store.commit("setLoading", true);
       axios({
         method: "PUT",
-        url: "https://api.sharpeye.co.nz/api/v1/model/sale.order.line/" + id,
+        url:
+          "http://api-test.sharpeye.co.nz/api/v1/model/sale.order.line/" + id,
         headers: {
           access_token: this.userProfile.accessToken,
           Accept: "application/json",
@@ -358,7 +360,8 @@ export default {
       this.$store.commit("setLoading", true);
       axios({
         method: "DELETE",
-        url: "https://api.sharpeye.co.nz/api/v1/model/sale.order.line/" + id,
+        url:
+          "http://api-test.sharpeye.co.nz/api/v1/model/sale.order.line/" + id,
         headers: {
           access_token: this.userProfile.accessToken
         }
