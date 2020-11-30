@@ -222,7 +222,7 @@ export default {
     },
   },
   updated() {
-    if (this.userProfile.rank <= 4) {
+    if (this.userProfile.rank <= 6) {
       fb.auth
         .signOut()
         .then(() => {

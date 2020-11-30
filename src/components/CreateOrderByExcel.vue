@@ -477,7 +477,7 @@ export default {
             line.product_id = 3;
             break;
           case "FP":
-            line.product_id = 6;
+            line.product_id = 2631;
             break;
           case "HP":
             line.product_id = 5;
@@ -495,7 +495,7 @@ export default {
             line.product_id = 9;
             break;
           case "WA":
-            line.product_id = 10;
+            line.product_id = 2629;
             break;
           case "DG":
             line.product_id = 2614;
