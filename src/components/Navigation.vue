@@ -1,5 +1,5 @@
 <template>
-  <v-content>
+  <v-main>
     <v-navigation-drawer fixed clipped v-model="drawer" app light>
       <v-list dense>
         <v-list>
@@ -154,7 +154,7 @@
         </v-btn>
       </v-layout>
     </v-app-bar>
-  </v-content>
+  </v-main>
 </template>
 
 <script>
