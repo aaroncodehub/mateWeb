@@ -1,9 +1,9 @@
 <template>
   <v-app class="grey lighten-4">
-    <v-content>
+    <v-main>
       <Navigation v-if="currentUser"></Navigation>
     <router-view/>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
